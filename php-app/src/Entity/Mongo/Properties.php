@@ -2,6 +2,9 @@
 
 namespace App\Entity\Mongo;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\SearchFilter;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -10,6 +13,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity\Mongo\Embedded
  * @MongoDB\Document
  */
+#[ApiResource(
+    itemOperations: [
+         "get"
+    ],
+    collectionOperations: [
+         "get"
+    ]
+)]
+#[ApiFilter(
+    SearchFilter::class, 
+    properties: [
+        'name' => 'partial',
+        'tag' => 'partial'
+    ]
+)]
 class Properties
 {
 
@@ -27,7 +45,7 @@ class Properties
     /**
      * @MongoDB\Field(type="int")
      */
-    private int $displayMode;
+    private ?int $displayMode = null;
 
     /**
      * @MongoDB\Field(type="int")
@@ -38,6 +56,11 @@ class Properties
      * @MongoDB\Field(type="collection", nullable=true)
      */
     private array $values = [];
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private string $tag;
 
 
     public function getId(): string
@@ -69,7 +92,7 @@ class Properties
     /**
      * @return int
      */
-    public function getDisplayMode(): int
+    public function getDisplayMode(): ?int
     {
         return $this->displayMode;
     }
@@ -103,10 +126,22 @@ class Properties
     }
 
     /**
-     * @return Items[]
+     * Get the value of tag
+     *
+     * @return string
      */
-    public function getItems(): array
+    public function getTag(): string
     {
-        return $this->items;
+        return $this->tag;
+    }
+
+    /**
+     * Set the value of tag
+     *
+     * @param string $tag
+     */
+    public function setTag(string $tag)
+    {
+        $this->tag = $tag;
     }
 }

@@ -7,12 +7,14 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\SearchFilter;
+use App\Entity\Mongo\Embedded\Category;
 use App\Entity\Mongo\Embedded\ItemsProperties;
 use App\Entity\Mongo\Embedded\SocketsExt;
 use App\Filter\PropertiesFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Filter\ModsFilter;
 /**
  * Class Items
  * @package App\Entity\Mongo
@@ -32,6 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     properties: [
         'name' => 'partial',
         'baseType' => 'partial',
+        'extended.category' => 'partial',
     ]
 )]
 #[ApiFilter(
@@ -51,6 +54,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[ApiFilter(
     PropertiesFilter::class
+)]
+#[ApiFilter(
+    ModsFilter::class
 )]
 class Items
 {
@@ -176,10 +182,10 @@ class Items
     private bool $identified;
     
     /**
-     * @MongoDB\Field(type="bool")
+     * @MongoDB\Field(type="bool", nullable=true)
      */
     #[Groups(["item_get"])]
-    private bool $corrupted;
+    private ?bool $corrupted = null;
     
     /**
      * TODO rework ?
@@ -229,11 +235,11 @@ class Items
     private iterable $properties;
     
     /**
-     * @var array $extended     
-     * @MongoDB\Field(type="collection", nullable=true)
+     * @var Category $extended     
+     * @MongoDB\EmbedOne(targetDocument=Category::class)
      */
     #[Groups(["item_get"])]
-    private $extended;
+    private ?Category $extended = null;
     
     /**
      * @var Socket[] $sockets     
@@ -247,7 +253,7 @@ class Items
      * @MongoDB\EmbedOne(targetDocument=SocketsExt::class)
      */
     #[Groups(["item_get"])]
-    private SocketsExt $socketsExt;
+    private ?SocketsExt $socketsExt = null;
     
     /**
      * @var array $requirements     
@@ -697,17 +703,17 @@ class Items
         $this->utilityMods = $utilityMods;
     }
 
-    public function getExtended(): array
+    public function getExtended(): Category
     {
         return $this->extended;
     }
 
-    public function setExtended(array $extended)
+    public function setExtended(Category $extended)
     {
         $this->extended = $extended;
     }
 
-    public function getSocketsExt(): SocketsExt
+    public function getSocketsExt(): ?SocketsExt
     {
         return $this->socketsExt;
     }
@@ -719,7 +725,7 @@ class Items
         return $this;
     }
 
-    public function getCorrupted(): bool
+    public function getCorrupted(): ?bool
     {
         return $this->corrupted;
     }

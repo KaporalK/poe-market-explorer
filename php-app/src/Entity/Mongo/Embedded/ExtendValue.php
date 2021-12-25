@@ -30,6 +30,13 @@ class ExtendValue
      * @Groups({"item_get"})
      */
     private ?float $maxValue = null;
+
+    /**
+     * @MongoDB\Field(type="float")
+     * @Groups({"item_get"})
+     */
+    private ?float $average = null;
+
     /**
      * @MongoDB\Field(type="int")
      * @Groups({"item_get"})
@@ -75,5 +82,17 @@ class ExtendValue
     public function setType(?int $type)
     {
         $this->type = $type;
+    }
+
+    public function getAverage(): ?float
+    {
+        return $this->average;
+    }
+
+    public function setAverage(?float $average): self
+    {
+        $this->average = $average;
+
+        return $this;
     }
 }

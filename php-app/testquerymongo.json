@@ -1,0 +1,22 @@
+[
+  { "properties":{
+      "$elemMatch":{
+        "name":"Armour",
+        "extendValues.numValue": {"$gt": 500}
+      }
+    }
+  },
+
+  {"sockets": {"$elemMatch": {"sColour": "G", "$match": {"count": { "$eq": 6}}}}},
+  {"$match":{"properties":{"$elemMatch":{"name":"Armour","extendValues.numValue":{"$gt":500,"$lte":550}}}}},
+  {"$match":{"modExts":{"$elemMatch":{"slug":"/increased_Physical_Damage/","average":{"$gt":80}}}}},
+  {"modExts":{"$elemMatch":{"slug":{"$regex":".*increased_Physical_Damage.*"},"average":{"$gt":80}}}},
+
+  {"$match": {"sockets.sColour": "G"}},
+  
+    {
+      "group": 0,
+      "attr": "D",
+      "sColour": "G"
+    }
+]

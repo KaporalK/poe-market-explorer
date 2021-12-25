@@ -9,7 +9,9 @@
 
 namespace App\Entity\Mongo;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -28,8 +30,36 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * Class Object
  */
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'text' => 'partial'
+    ]
+)]
 class Mods
 {
+    public const MOD_TYPES = [
+        'implicit',
+        'explicit',
+        'crafted',
+        'scourge',
+        'vaal',
+        'unique',
+        'synthesised',
+        'fractured',
+        'enchant',
+        'veiled',
+        'shaper',
+        'elder',
+        'crusader',
+        'warlord',
+        'hunter',
+        'redeemer',
+        'essence',
+        'delve',
+        'incursion',
+    ];
+
     /**
      * @MongoDB\Id(strategy="NONE", type="string")
      */
@@ -55,6 +85,24 @@ class Mods
      */
     private string $nbValue;
 
+    /**
+     * @MongoDB\Field(type="collection", nullable=true)
+     * @Groups({"item_get"})
+     */
+    private array $type = [];
+
+    /**
+     * @MongoDB\Field(type="int")
+     * @Groups({"item_get"})
+     */
+    private int $maxTier = 0;
+
+    /**
+     * @MongoDB\Field(type="int")
+     * @Groups({"item_get"})
+     */
+    private int $minTier = 0;
+
     public function getId(): string
     {
         return $this->id;
@@ -64,7 +112,7 @@ class Mods
     {
         $this->id = $id;
     }
-    
+
     public function getText(): string
     {
         return $this->text;
@@ -107,6 +155,42 @@ class Mods
     public function setNbValue(string $nbValue)
     {
         $this->nbValue = $nbValue;
+
+        return $this;
+    }
+
+    public function getMaxTier(): int
+    {
+        return $this->maxTier;
+    }
+
+    public function setMaxTier(int $maxTier): self
+    {
+        $this->maxTier = $maxTier;
+
+        return $this;
+    }
+
+    public function getMinTier(): int
+    {
+        return $this->minTier;
+    }
+
+    public function setMinTier(int $minTier): self
+    {
+        $this->minTier = $minTier;
+
+        return $this;
+    }
+
+    public function getType(): array
+    {
+        return $this->type;
+    }
+
+    public function setType(array $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
