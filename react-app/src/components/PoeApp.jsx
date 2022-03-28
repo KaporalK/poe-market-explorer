@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import ItemList from './ItemList';
 import { makeApiCall } from '../utils/ApiHelper';
+import { makeUrl } from '../utils/makeUrl';
+import ItemList from './ItemList';
 import Search from './Search/Search';
 
 class PoeApp extends Component {
@@ -9,7 +10,6 @@ class PoeApp extends Component {
     super(props)
 
     this.state = {
-        searchValue: null,
         result: [],
         listRef: React.createRef(),
         page: 1,
@@ -22,18 +22,17 @@ class PoeApp extends Component {
     });
   }
 
-  confirmSearch(value){
-    this.setState({
-        searchValue: value,
-        result: [...this.state.result, value]
-    })
+  confirmSearch(filters){
     // this.state.listRef.current.updateItems([]);
     this.state.listRef.current.setState({
       loading: true
     });
 
+    console.log(filters)
+    const url = makeUrl('https://localhost/items', filters, this.state.page)
+    console.log(url);
     //todo env
-    const json = makeApiCall(`https://localhost/items?page=${this.state.page}`);
+    const json = makeApiCall(url);
     json.then((e) => {
       this.state.listRef.current.setState({
         loading: false
@@ -49,7 +48,6 @@ class PoeApp extends Component {
     return (
         <div>
             <Search valueConfirm={this.confirmSearch.bind(this)}></Search>
-            <p>{this.state.searchValue}</p>
             <ItemList items={[]} ref={this.state.listRef}></ItemList>
         </div>
     );

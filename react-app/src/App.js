@@ -12,7 +12,7 @@ class App extends Component {
           <h1 className="App-title">Poe item finder</h1>
         </header>
         <p className="App-intro">
-          I was changed on the Feature branch
+          I was changed on the Feature brssanch tsssest tetettt
         </p>
         <PoeApp></PoeApp>
       </div>

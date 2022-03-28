@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Searchbar extends Component {
+class NameFilter extends Component {
 
   constructor(props) {
     super(props)
@@ -14,7 +14,7 @@ class Searchbar extends Component {
     return (
       <div className="Searchbar">
         <h1>
-          I am the Searchbar
+          I am the Searchbar tesssstdsdqsddddddss
         </h1>
         <input type="text" onChange={evt => this.state.change(evt.target.value)}></input>
       </div>
@@ -22,4 +22,4 @@ class Searchbar extends Component {
   }
 }
 
-export default Searchbar;
+export default NameFilter;

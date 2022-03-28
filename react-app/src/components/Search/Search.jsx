@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Searchbar from './Searchbar';
 import CategoryFilter from './CategoryFilter';
+import NameFilter from './NameFilter';
 
 class Search extends Component {
 
@@ -9,25 +9,27 @@ class Search extends Component {
 
     this.state = {
       valueConfirm: props.valueConfirm,
-      searchValue: ''
+      filters: [],
     }
   }
 
-  newValue(value){
-    this.setState({
-      searchValue: value
-    })
+  addFilter(filter) {
+    console.log(filter)
+    this.setState(prevState => ({
+      filters: [...prevState.filters, filter]
+    }))
   }
 
   render() {
     return (
       <div className="Search">
-          <CategoryFilter></CategoryFilter>
-          <Searchbar change={this.newValue.bind(this)}></Searchbar>
-          <input type="submit" onClick={() => this.state.valueConfirm(this.state.searchValue)} value='search'></input>
+        <CategoryFilter addFilter={this.addFilter.bind(this)}></CategoryFilter>
+        <NameFilter change={console.log}></NameFilter>
+        <input type="submit" onClick={() => this.state.valueConfirm(this.state.filters)} value='search'></input>
       </div>
     );
   }
 }
 
 export default Search;
+
