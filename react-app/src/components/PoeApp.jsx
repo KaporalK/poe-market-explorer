@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import ItemList from './ItemList';
 import { makeApiCall } from '../utils/ApiHelper';
+import { makeUrl } from '../utils/makeUrl';
+import ItemList from './ItemList';
 import Search from './Search/Search';
 
 class PoeApp extends Component {
@@ -9,7 +10,6 @@ class PoeApp extends Component {
     super(props)
 
     this.state = {
-        searchValue: null,
         result: [],
         listRef: React.createRef(),
         page: 1,
@@ -22,25 +22,38 @@ class PoeApp extends Component {
     });
   }
 
-  confirmSearch(value){
-    this.setState({
-        searchValue: value,
-        result: [...this.state.result, value]
-    })
-    // this.state.listRef.current.updateItems([]);
+  confirmSearch(filters){
     this.state.listRef.current.setState({
       loading: true
     });
 
     //todo env
-    const json = makeApiCall(`https://localhost/items?page=${this.state.page}`);
+    const url = makeUrl('https://localhost/items', filters);
+    console.log(url);
+    this.setState({
+      lastQuery: url
+    });
+    this.state.listRef.current.setState({
+      items: []
+    });
+    this.updateItemList(url, 1);
+  }
+
+  nextPage(){
+    if(this.state.lastQuery !== undefined){
+      this.updateItemList(this.state.lastQuery, this.state.page + 1);
+    }
+  }
+
+  updateItemList(url, page){
+    const json = makeApiCall(url, page);
     json.then((e) => {
       this.state.listRef.current.setState({
         loading: false
       });
       this.state.listRef.current.addItems(e['hydra:member']);
       this.setState({
-        page: this.state.page + 1
+        page: page
       })
     });
   }
@@ -48,9 +61,11 @@ class PoeApp extends Component {
   render() {
     return (
         <div>
-            <Search valueConfirm={this.confirmSearch.bind(this)}></Search>
-            <p>{this.state.searchValue}</p>
+            <Search 
+              valueConfirm={this.confirmSearch.bind(this)} 
+            > </Search>
             <ItemList items={[]} ref={this.state.listRef}></ItemList>
+            <input type='submit' value='next page' onClick={() => this.nextPage()}></input>
         </div>
     );
   }

@@ -1,6 +1,9 @@
 version: '3'
 services:
   web:
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -11,7 +14,9 @@ services:
       - .:/app
     env_file:
     - ./.env
+
   tests:
+    stdin_open: true
     build:
       context: .
       dockerfile: Dockerfile.dev

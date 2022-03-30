@@ -1,43 +1,65 @@
 import React, { Component } from 'react';
 import { makeApiCall } from '../../utils/ApiHelper';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 class CategoryFilter extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      provider: 'https://localhost/properties?page=1&tag=Category',
-      result: []
+      provider: 'https://localhost/properties?tag=Category',
+      addFilter: props.addFilter,
+      className: props.className,
+      result: [],
     }
   }
 
-  autocomple(data){
-      const result = makeApiCall(this.state.provider + '&name=' + data);
+  componentDidMount() {
+    this.autocomple('');
+  }
+
+
+  autocomple(data) {
+    this.setState({
+      result: [],
+      loading: true
+    })
+    const result = makeApiCall(this.state.provider + '&name=' + data, 1);
+    result.then((e) => {
       this.setState({
-        result: [],
-        loading: true
+        result: e['hydra:member'],
+        loading: false
       })
-      result.then((e) => {
-        this.setState({
-            result: e['hydra:member'],
-            loading: false
-        })
-      })
+    })
+  }
+
+  selectFilter(newValue) {
+    console.log(newValue);
+    this.state.addFilter({
+      extendedategory: {
+        str: `extended.category=${newValue}`
+      }
+    })
   }
 
   render() {
     return (
-      <div className="CategoryFilter">
-        <input type="text" onInput={evt => this.autocomple(evt.target.value)}></input>
-        {this.state.loading ? '°' : ''}
-        {this.state.result.length > 0 ? 
-          <div>
-            {this.state.result.map((e) => {
-              console.log(e);
-              return <p>{e.name}</p>
-            })}
-          </div>
-        : ''}
+      <div className={"categoryFilter " + this.state.className}>
+        <Autocomplete
+          id="category-filter"
+          filterOptions={x => x}
+          options={this.state.result.map((e) => {
+            return e.name
+          })}
+          onChange={(evet, newValue) => {
+            this.selectFilter(newValue);
+          }}
+          onInputChange={(evt, newValue) => {
+            this.autocomple(newValue)
+          }}
+          renderInput={(params) => <TextField {...params} label="Item Category" />}
+        />
       </div>
     );
   }

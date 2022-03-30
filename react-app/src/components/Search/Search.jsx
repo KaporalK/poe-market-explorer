@@ -1,6 +1,8 @@
+import './Search.css';
 import React, { Component } from 'react';
-import Searchbar from './Searchbar';
 import CategoryFilter from './CategoryFilter';
+import NameFilter from './NameFilter';
+import RarityFilter from './RarityFilter';
 
 class Search extends Component {
 
@@ -9,25 +11,44 @@ class Search extends Component {
 
     this.state = {
       valueConfirm: props.valueConfirm,
-      searchValue: ''
+      filters: [],
     }
   }
 
-  newValue(value){
+  addFilter(filter) {
+    this.setState(prevState => ({
+      filters: { ...prevState.filters, ...filter }
+    }))
+  }
+
+  addNameFilter(name) {
     this.setState({
-      searchValue: value
+      nameFilter: name
     })
+  }
+
+  confirmSearch() {
+    let finalFilters = {}
+    if (Object.keys(this.state.filters).length > 0 ) {
+      finalFilters = { ...this.state.filters };
+    }
+    if (this.state.nameFilter !== undefined) {
+      finalFilters = { ...finalFilters, ...this.state.nameFilter };
+    }
+    this.state.valueConfirm(finalFilters)
   }
 
   render() {
     return (
-      <div className="Search">
-          <CategoryFilter></CategoryFilter>
-          <Searchbar change={this.newValue.bind(this)}></Searchbar>
-          <input type="submit" onClick={() => this.state.valueConfirm(this.state.searchValue)} value='search'></input>
+      <div className="search">
+        <NameFilter addFilter={this.addNameFilter.bind(this)} className="filter"></NameFilter>
+        <CategoryFilter addFilter={this.addFilter.bind(this)} className="filter"></CategoryFilter>
+        <RarityFilter addFilter={this.addFilter.bind(this)} className="filter"></RarityFilter>
+        <input type="submit" onClick={() => this.confirmSearch()} value='search'></input>
       </div>
     );
   }
 }
 
 export default Search;
+

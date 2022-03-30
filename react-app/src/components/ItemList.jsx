@@ -27,6 +27,10 @@ class ItemList extends Component {
     return (
       <div className="ItemList">
         <h3> Iam the result</h3>
+        <input 
+          type='submit' value='clear list' 
+          onClick={() => this.setState({items: [], loading: false})}
+        ></input>
         {this.state.items.map((item, i) => {
           return <Item key={i} item={item}></Item>
         })}

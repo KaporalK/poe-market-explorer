@@ -58,10 +58,9 @@ class Properties
     private array $values = [];
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="string", nullable=true)
      */
-    private string $tag;
-
+    private ?string $tag = null;
 
     public function getId(): string
     {
@@ -128,9 +127,9 @@ class Properties
     /**
      * Get the value of tag
      *
-     * @return string
+     * @return null|string
      */
-    public function getTag(): string
+    public function getTag(): ?string
     {
         return $this->tag;
     }
@@ -140,7 +139,7 @@ class Properties
      *
      * @param string $tag
      */
-    public function setTag(string $tag)
+    public function setTag(?string $tag)
     {
         $this->tag = $tag;
     }
