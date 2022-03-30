@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './NameFilter.css';
 
 class NameFilter extends Component {
 
@@ -6,17 +7,18 @@ class NameFilter extends Component {
     super(props)
 
     this.state = {
-      change: props.change,
+      addFilter: props.addFilter,
+      className: props.className
     }
   }
 
   render() {
     return (
-      <div className="Searchbar">
-        <h1>
-          I am the Searchbar tesssstdsdqsddddddss
-        </h1>
-        <input type="text" onChange={evt => this.state.change(evt.target.value)}></input>
+      <div className={"nameFilter " + this.state.className}>
+        <p>
+          Item name
+        </p>
+        <input type="text" onChange={evt => this.state.addFilter({ itemName: { str: 'itemName=' + evt.target.value } })}></input>
       </div>
     );
   }

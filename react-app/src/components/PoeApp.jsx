@@ -23,23 +23,37 @@ class PoeApp extends Component {
   }
 
   confirmSearch(filters){
-    // this.state.listRef.current.updateItems([]);
     this.state.listRef.current.setState({
       loading: true
     });
 
-    console.log(filters)
-    const url = makeUrl('https://localhost/items', filters, this.state.page)
-    console.log(url);
     //todo env
-    const json = makeApiCall(url);
+    const url = makeUrl('https://localhost/items', filters);
+    console.log(url);
+    this.setState({
+      lastQuery: url
+    });
+    this.state.listRef.current.setState({
+      items: []
+    });
+    this.updateItemList(url, 1);
+  }
+
+  nextPage(){
+    if(this.state.lastQuery !== undefined){
+      this.updateItemList(this.state.lastQuery, this.state.page + 1);
+    }
+  }
+
+  updateItemList(url, page){
+    const json = makeApiCall(url, page);
     json.then((e) => {
       this.state.listRef.current.setState({
         loading: false
       });
       this.state.listRef.current.addItems(e['hydra:member']);
       this.setState({
-        page: this.state.page + 1
+        page: page
       })
     });
   }
@@ -47,8 +61,11 @@ class PoeApp extends Component {
   render() {
     return (
         <div>
-            <Search valueConfirm={this.confirmSearch.bind(this)}></Search>
+            <Search 
+              valueConfirm={this.confirmSearch.bind(this)} 
+            > </Search>
             <ItemList items={[]} ref={this.state.listRef}></ItemList>
+            <input type='submit' value='next page' onClick={() => this.nextPage()}></input>
         </div>
     );
   }

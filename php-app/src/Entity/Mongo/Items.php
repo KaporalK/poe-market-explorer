@@ -10,11 +10,14 @@ use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\SearchFilter;
 use App\Entity\Mongo\Embedded\Category;
 use App\Entity\Mongo\Embedded\ItemsProperties;
 use App\Entity\Mongo\Embedded\SocketsExt;
+use App\Filter\ItemNameFilter;
 use App\Filter\PropertiesFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Filter\ModsFilter;
+use App\Filter\RarityFilter;
+
 /**
  * Class Items
  * @package App\Entity\Mongo
@@ -57,6 +60,12 @@ use App\Filter\ModsFilter;
 )]
 #[ApiFilter(
     ModsFilter::class
+)]
+#[ApiFilter(
+    ItemNameFilter::class
+)]
+#[ApiFilter(
+    RarityFilter::class
 )]
 class Items
 {
