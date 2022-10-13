@@ -9,18 +9,28 @@ class RarityFilter extends Component {
     super(props)
     this.state = {
       addFilter: props.addFilter,
-      className: props.className
+      className: props.className,
+      value: null
     }
   }
 
-  selectFilter(newValue) {
+  handleChange(newValue) {
     this.state.addFilter({
       rarity: {
         str: `rarity=${newValue.id}`
       }
     });
+    this.setState({
+      value: newValue
+    })
   }
 
+  clearFilter(){
+    this.setState({
+      value: null
+    })
+  }
+  
   render() {
     return (
       <div className={"rarityFilter " + this.state.className}>
@@ -36,10 +46,10 @@ class RarityFilter extends Component {
             { label: 'Any Non-unique', id: 7 },
           ]}
           onChange={(evet, newValue) => {
-            this.selectFilter(newValue);
+            this.handleChange(newValue);
           }}
-          renderInput={(params) => <TextField {...params} label="Item Rarity" />}
-        />
+          renderInput={(params) => <TextField {...params} label="Item Rarity" variant="filled" />}
+          value={this.state.value} />
       </div>
     );
   }

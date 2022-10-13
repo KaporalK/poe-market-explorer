@@ -50,6 +50,7 @@ class ModsGeneratorService
         $modDatas = [
             'text' => $mod,
             'slug' => self::makeSlugForMod($mod),
+            'search' => preg_replace('/[\d]+\.[\d]+|[\d]+/u', 'X', $mod),
             'numValue' => $matche[0],
             'average' => array_sum($matche[0]) / count($matche[0]),
             'type' => [$type],
@@ -63,6 +64,7 @@ class ModsGeneratorService
         $modDatas = [
             'text' => $mod,
             'slug' => self::makeSlugForMod($mod),
+            'search' => preg_replace('/[\d]+\.[\d]+|[\d]+/u', 'X', $mod),
             'numValue' => null,
             'average' => null,
             'type' => [$type],

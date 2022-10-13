@@ -33,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(
     SearchFilter::class,
     properties: [
-        'text' => 'partial'
+        'text' => 'ipartial'
     ]
 )]
 class Mods

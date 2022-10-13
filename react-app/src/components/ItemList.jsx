@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Item from './Item';
+import Button from '@mui/material/Button';
+import { flexBoxCenter, flexColumn, muiDarkTheme } from '../style/defaultTheme';
+import { css } from 'glamor';
+
 
 class ItemList extends Component {
 
@@ -11,13 +15,13 @@ class ItemList extends Component {
     }
   }
 
-  updateItems(items){
+  updateItems(items) {
     this.setState({
       items: items
     })
   }
 
-  addItems(items){
+  addItems(items) {
     this.setState(prevState => ({
       items: [...prevState.items, ...items]
     }))
@@ -25,15 +29,15 @@ class ItemList extends Component {
 
   render() {
     return (
-      <div className="ItemList">
-        <h3> Iam the result</h3>
-        <input 
-          type='submit' value='clear list' 
-          onClick={() => this.setState({items: [], loading: false})}
-        ></input>
-        {this.state.items.map((item, i) => {
-          return <Item key={i} item={item}></Item>
-        })}
+      <div {...css(flexBoxCenter, flexColumn)}>
+        <Button {...muiDarkTheme} sx={{ m: '5px' }} variant="outlined" onClick={() => this.setState({ items: [], loading: false })} >clear list</Button>
+        <div >
+          {this.state.items.map((item, i) => {
+            return <Item key={i} item={item}
+              addModFilter={this.props.addModFilter}>
+            </Item>
+          })}
+        </div>
         {this.state.loading ? <p>Loading</p> : ''}
       </div>
     );

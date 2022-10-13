@@ -84,11 +84,11 @@ class PropertiesGeneratorService
             return $properties;
         } elseif (count($properties['values']) > 1) {
             ///TODO
-            if (strpos('-', $properties['values'][0][0])){    
+            if (strpos('-', $properties['values'][0][0])) {
                 return self::multipleValueDoubleToProperties($properties);
             }
-            var_dump('todo handle other properties');           
-            var_dump($properties['values']);
+            var_dump('todo handle other properties');
+            var_dump($properties);
         }
         return $properties;
     }
@@ -97,8 +97,10 @@ class PropertiesGeneratorService
     {
         $newProperties = $properties;
         $newProperties['extendValues'] = [
-            'numValue' => floatval($properties['values'][0][0]),
-            'average' => floatval($properties['values'][0][0]),
+            'numValue' => (float)$properties['values'][0][0],
+            'average' => (float)$properties['values'][0][0],
+            'minValue' => (float)$properties['values'][0][0],
+            'maxValue' => (float)$properties['values'][0][0],
             'type' => $properties['values'][0][1],
         ];
         return $newProperties;
@@ -108,8 +110,8 @@ class PropertiesGeneratorService
     {
         $newProperties = $properties;
         $newProperties['extendValues'] = [
-            'numValue' => floatval(trim($properties['values'][0][0], '+%')),
-            'average' => floatval(trim($properties['values'][0][0], '+%')),
+            'numValue' => (float)trim($properties['values'][0][0], '+%'),
+            'average' => (float)trim($properties['values'][0][0], '+%'),
             'type' => $properties['values'][0][1],
         ];
         return $newProperties;
@@ -120,9 +122,10 @@ class PropertiesGeneratorService
         $newProperties = $properties;
         $explodeValue = explode('-', $properties['values'][0][0]);
         $newProperties['extendValues'] = [
-            'minValue' => floatval($explodeValue[0]),
-            'maxValue' => floatval($explodeValue[1]),
-            'average' => floatval($explodeValue[0]) + floatval($explodeValue[1]) / 2,
+            'numValue' => ((float)$explodeValue[0] + (float)$explodeValue[1]) / 2,
+            'minValue' => (float)$explodeValue[0],
+            'maxValue' => (float)$explodeValue[1],
+            'average' => ((float)$explodeValue[0] + (float)$explodeValue[1]) / 2,
             'type' => $properties['values'][0][1],
         ];
         return $newProperties;
@@ -134,9 +137,9 @@ class PropertiesGeneratorService
         foreach ($properties['values'] as $values) {
             $explodeValue = explode('-', $values[0]);
             $newProperties['extendValues'][] = [
-                'minValue' => floatval($explodeValue[0]),
-                'maxValue' => floatval($explodeValue[1]),
-                'average' => floatval($explodeValue[0]) + floatval($explodeValue[1]) / 2,
+                'minValue' => (float)$explodeValue[0],
+                'maxValue' => (float)$explodeValue[1],
+                'average' => ((float)$explodeValue[0] + (float)$explodeValue[1]) / 2,
                 'type' => $values[1],
             ];
         }
@@ -147,7 +150,9 @@ class PropertiesGeneratorService
     {
         $newProperties = $properties;
         $newProperties['extendValues'] = [
-            'value' => $properties['values'][0][0],
+            'numValue' => $properties['values'][0][0],
+            'minValue' => $properties['values'][0][0],
+            'maxValue' => $properties['values'][0][0],
             'average' => $properties['values'][0][0],
             'type' => $properties['values'][0][1],
         ];

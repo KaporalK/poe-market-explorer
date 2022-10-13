@@ -5,18 +5,13 @@ import ItemList from './ItemList';
 import FiltersList from './Filters/FiltersList';
 import Button from '@mui/material/Button';
 import { css } from 'glamor';
-import { muiDarkTheme, primaryColor, flexBoxCenter } from '../style/defaultTheme';
-import { ThemeProvider } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import SearchApp from './SearchApp';
+import { primaryColor } from '../style/defaultTheme';
 
 const margin = {
   padding: '20px',
 }
 
-class PoeApp extends Component {
+class SearchApp extends Component {
 
   constructor(props) {
     super(props)
@@ -25,7 +20,6 @@ class PoeApp extends Component {
       result: [],
       listRef: React.createRef(),
       FilterListRef: React.createRef(),
-      menuValue: 0,
       page: 1,
       filters: {},
     }
@@ -101,23 +95,22 @@ class PoeApp extends Component {
   render() {
     return (
       <div {...css(margin, primaryColor)}>
-        <ThemeProvider theme={muiDarkTheme}>
-          <Box sx={{...flexBoxCenter}}>
-            <Tabs value={this.state.menuValue} onChange={(evnt, newValue) => this.setState({menuValue: newValue})} aria-label='Site menu'>
-              <Tab value={0} label="Market" />
-              <Tab value={1} label="Wanna buy" />
-            </Tabs>
-          </Box>
-          <div hidden={this.state.menuValue !== 0}>
-            <SearchApp></SearchApp>
-          </div>
-          <div hidden={this.state.menuValue !== 1}>
-            Item Two
-          </div>
-        </ThemeProvider>
+        <FiltersList
+          valueConfirm={this.confirmSearch.bind(this)}
+          addFilter={this.addFilter.bind(this)}
+          deleteFilter={this.deleteFilter.bind(this)}
+          clearFilter={this.clearFilter.bind(this)}
+          ref={this.state.FilterListRef}
+        > </FiltersList>
+        <Button sx={{ m: '5px' }} className="button" variant="outlined" onClick={() => this.confirmSearch(this.state.filters)} >Search</Button>
+        <ItemList items={[] /*TODO find out why this.state.result does not update the ItemList */}
+          ref={this.state.listRef}
+          addModFilter={this.addModFilter.bind(this)}>
+        </ItemList>
+        <Button sx={{ m: '5px' }} className="button" variant="outlined" onClick={() => this.nextPage()} >next page</Button>
       </div>
     );
   }
 }
 
-export default PoeApp;
+export default SearchApp;

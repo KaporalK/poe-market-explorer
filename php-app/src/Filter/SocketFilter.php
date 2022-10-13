@@ -7,30 +7,32 @@ use Doctrine\ODM\MongoDB\Aggregation\Builder;
 use Exception;
 use Symfony\Component\PropertyInfo\Type;
 
+//todo should be LinkedColor filter but idk how to do it
 final class SocketFilter extends AbstractFilter
 {
     public function filterProperty(string $property, $value, Builder $aggregationBuilder, string $resourceClass, string $operationName = null, array &$context = [])
     {
-        
-       //todo
-        
-        
-
+         // otherwise filter is applied to order and page as well
+        if ($property !== 'socket') {
+            return;
+        }
+        // var_dump($property, $value);die;
+        foreach($value as $propertyName => $val){
+           
+        }
     }
 
     public function getDescription(string $resourceClass): array
     {
-  
-        //todo
         $description = [];
-        $description['property[]'] = [
-            'property' => 'property[]',
+        $description['socket[]'] = [
+            'property' => 'socket[]',
             'type' => Type::BUILTIN_TYPE_ARRAY,
             'required' => false,
             'swagger' => [
-                'description' => 'filter using property["PropertyName"]=minValue or property["PropertyName"]=minValue,maxValue',
-                'name' => 'Property filter',
-                'type' => 'Armour/Evasion/etc',
+                'description' => 'filter using socket["W/R/B/G"]=minValue',
+                'name' => 'socket filter',
+                'type' => 'Socket color',
                 'style' => 'deepObject'
             ],
             'is_collection' => true

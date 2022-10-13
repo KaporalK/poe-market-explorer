@@ -10,7 +10,7 @@
     "doctrine/annotations": "^1.0",
     "doctrine/doctrine-bundle": "^2.4.3",
     "doctrine/doctrine-migrations-bundle": "^3.2",
-    "doctrine/mongodb-odm-bundle": "4.4",
+    "doctrine/mongodb-odm-bundle": "4.5",
     "doctrine/orm": "^2.10",
     "guzzlehttp/guzzle": "^7.4",
     "nelmio/cors-bundle": "^2.1",
@@ -35,7 +35,10 @@
     "preferred-install": {
       "*": "dist"
     },
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "symfony/flex": true
+    }
   },
   "autoload": {
     "psr-4": {

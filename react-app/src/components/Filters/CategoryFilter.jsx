@@ -12,13 +12,13 @@ class CategoryFilter extends Component {
       addFilter: props.addFilter,
       className: props.className,
       result: [],
+      value: null
     }
   }
 
   componentDidMount() {
     this.autocomple('');
   }
-
 
   autocomple(data) {
     this.setState({
@@ -34,12 +34,24 @@ class CategoryFilter extends Component {
     })
   }
 
-  selectFilter(newValue) {
-    console.log(newValue);
-    this.state.addFilter({
-      extendedategory: {
-        str: `extended.category=${newValue}`
-      }
+  handleChange(newValue) {
+    if (newValue === null) {
+      this.props.deleteFilter('Extendedategory')
+    } else {
+      this.state.addFilter({
+        modsExtendedategory: {
+          str: `extended.category=${newValue}`
+        }
+      })
+    }
+    this.setState({
+      value: newValue
+    })
+  }
+
+  clearFilter() {
+    this.setState({
+      value: null
     })
   }
 
@@ -52,13 +64,14 @@ class CategoryFilter extends Component {
           options={this.state.result.map((e) => {
             return e.name
           })}
-          onChange={(evet, newValue) => {
-            this.selectFilter(newValue);
+          onChange={(evnt, newValue) => {
+            this.handleChange(newValue);
           }}
-          onInputChange={(evt, newValue) => {
+          onInputChange={(evnt, newValue) => {
             this.autocomple(newValue)
           }}
-          renderInput={(params) => <TextField {...params} label="Item Category" />}
+          renderInput={(params) => <TextField {...params} label="Item Category" variant="filled" />}
+          value={this.state.value}
         />
       </div>
     );

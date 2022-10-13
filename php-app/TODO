@@ -1,1 +1,7 @@
 delete doctrine sql
+add (mod + property)order filter
+add partial mod filter (
+    %to any elemental resistance,
+    global weapon damage,
+    add same mod together during search
+)

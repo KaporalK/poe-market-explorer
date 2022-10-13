@@ -9,6 +9,7 @@ use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\MongoDbOdm\Filter\SearchFilter;
 use App\Entity\Mongo\Embedded\Category;
 use App\Entity\Mongo\Embedded\ItemsProperties;
+use App\Entity\Mongo\Embedded\ModExt;
 use App\Entity\Mongo\Embedded\SocketsExt;
 use App\Filter\ItemNameFilter;
 use App\Filter\PropertiesFilter;
@@ -30,7 +31,8 @@ use App\Filter\RarityFilter;
       ],
       collectionOperations: [
            "get"
-      ]
+      ],
+      order: ["note" => "ASC"]
 )]
 #[ApiFilter(
     SearchFilter::class, 
@@ -229,6 +231,13 @@ class Items
     private array $utilityMods = [];
     
     /**
+     * @var ModExt[]&ArrayCollection $modExts     
+     * @MongoDB\EmbedMany(targetDocument=ModExt::class)
+     */
+    #[Groups(["item_get"])]
+    private iterable $modExts;
+
+    /**
      * TODO rework ?
      * @var string[] $flavourText
      * @MongoDB\Field(type="collection", nullable=true)
@@ -302,6 +311,7 @@ class Items
     public function __construct()
     {
         $this->properties = new ArrayCollection();
+        $this->modExts = new ArrayCollection();
     }
 
     /**
@@ -742,6 +752,30 @@ class Items
     public function setCorrupted(bool $corrupted): self
     {
         $this->corrupted = $corrupted;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of modExts
+     *
+     * @return iterable
+     */
+    public function getModExts(): array
+    {
+        return $this->modExts->getValues();
+    }
+
+    /**
+     * Set the value of modExts
+     *
+     * @param iterable $modExts
+     *
+     * @return self
+     */
+    public function setModExts(array $modExts): self
+    {
+        $this->modExts = $modExts;
 
         return $this;
     }

@@ -9,11 +9,8 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Poe item finder</h1>
+          <h1 className="App-title">Poe item finder todo</h1>
         </header>
-        <p className="App-intro">
-          todo
-        </p>
         <PoeApp></PoeApp>
       </div>
     );
